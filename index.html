@@ -1,3 +1,32 @@
+Tienes razón: las fórmulas deben ajustarse **exactamente** a las reglas que proporcionaste. He corregido **todas las lógicas de cálculo** y mantenido el diseño moderno con **DaisyUI**, **modo oscuro por defecto**, **inputs con ancho limitado** y **materias colapsables**.
+
+---
+
+### ✅ Correcciones clave en las fórmulas:
+
+1. **Ingeniería Térmica**:  
+   - Si el examen final < 3.5 → **nota = examen final** (no se promedia).
+
+2. **Ampliación de Cálculo**:  
+   - Si parcial ≥ 5 → nota = 0.15·lab + 0.15·aula + 0.35·final + 0.35·parcial  
+   - Si parcial < 5 → nota = 0.15·lab + 0.15·aula + 0.7·final
+
+3. **Tecnología Eléctrica**:  
+   - Si parcial < 5 → examen final vale **85%** (15% lab + 85% final)  
+   - Si parcial ≥ 5 → 15% lab + 40% parcial + 45% final  
+   - **Además**: si final < 5 → **nota = final** (no se promedia)
+
+4. **Resistencia de Materiales**:  
+   - Sin condiciones → promedio directo.
+
+5. **Procesos de Fabricación**:  
+   - Si examen final < 2.5 → **nota = examen final**
+
+---
+
+### 💡 Código completo corregido (único archivo HTML):
+
+```html
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
@@ -22,10 +51,8 @@
     };
   </script>
   <style>
-    /* Inputs pequeños: ancho para hasta 8 dígitos */
-    .input-nota {
-      @apply w-auto max-w-[8ch] min-w-[6ch] text-center;
-    }
+    .input-nota { @apply w-auto max-w-[8ch] min-w-[6ch] text-center; }
+    .input-grande { @apply max-w-[12ch] w-full; }
     .resultado {
       @apply font-bold text-lg p-3 rounded-lg text-center mt-3;
     }
@@ -35,53 +62,40 @@
 </head>
 <body class="bg-base-100 text-base-content min-h-screen p-4 md:p-6">
 
+<div class="fixed top-4 right-4 z-50">
+  <label class="swap swap-rotate">
+    <input type="checkbox" id="theme-toggle" class="theme-controller" value="light" />
+    <svg class="swap-off fill-current w-8 h-8 text-yellow-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+    </svg>
+    <svg class="swap-on fill-current w-8 h-8 text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+    </svg>
+  </label>
+</div>
+
 <div class="max-w-4xl mx-auto">
-
-  <!-- Header -->
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl md:text-3xl font-bold text-principal">🎓 Calculadora de Notas • Ingeniería</h1>
-    <button id="theme-toggle" class="btn btn-circle btn-sm md:btn-md" aria-label="Cambiar tema">
-      <svg xmlns="http://www.w3.org/2000/svg" class="swap-off h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-      </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" class="swap-on h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-      </svg>
-    </button>
-  </div>
-
-  <!-- Contenedor de materias -->
+  <h1 class="text-2xl md:text-3xl font-bold text-principal text-center mb-8 mt-2">🎓 Calculadora de Notas • Ingeniería</h1>
   <div id="materias-container" class="space-y-5 mb-8"></div>
-
-  <!-- Botón limpiar -->
   <div class="text-center mb-6">
-    <button id="limpiar-btn" class="btn btn-error btn-md md:btn-lg">
-      🗑️ Limpiar todas las notas
-    </button>
+    <button id="limpiar-btn" class="btn btn-error btn-md md:btn-lg">🗑️ Limpiar todas las notas</button>
   </div>
-
-  <!-- Promedio general -->
   <div id="promedio" class="resultado bg-principal/10 text-principal" aria-live="polite"></div>
-
-  <!-- Picker de notas (flotante) -->
   <div id="nota-picker" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-base-100 shadow-xl rounded-2xl p-3 max-w-xs w-full hidden max-h-80 overflow-y-auto"></div>
 </div>
 
 <script>
-// === CONFIGURACIÓN DE TEMA ===
-const toggleTheme = () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  localStorage.setItem('theme', isDark ? 'light' : 'dark');
-};
+// === TEMA ===
+const toggle = document.getElementById('theme-toggle');
+const saved = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', saved);
+if (saved === 'light') toggle.checked = true;
 
-// Aplicar tema guardado o usar oscuro por defecto
-(() => {
-  const saved = localStorage.getItem('theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
-})();
-
-document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+toggle.addEventListener('change', () => {
+  const theme = toggle.checked ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+});
 
 // === DATOS DE MATERIAS ===
 const materiasData = [
@@ -89,14 +103,14 @@ const materiasData = [
     id: 'termica',
     titulo: 'Ingeniería Térmica',
     campos: [
-      { id: 'term_aula', label: '10% Puntos en aula' },
-      { id: 'term_lab', label: '10% Prácticas de laboratorio (Final)' },
+      { id: 'term_aula', label: '10% Puntos en aula', grande: true },
+      { id: 'term_lab', label: '10% Prácticas de laboratorio', grande: true },
       {
         tipo: 'grupo',
         label: '10% Proyecto de laboratorio (6 tests)',
         ids: ['term_t1','term_t2','term_t3','term_t4','term_t5','term_t6']
       },
-      { id: 'term_final', label: '70% Examen Final (mín. 35%)' }
+      { id: 'term_final', label: '70% Examen Final (mín. 3.5)', grande: true }
     ]
   },
   {
@@ -113,48 +127,48 @@ const materiasData = [
         label: '15% Problemas en aula (6)',
         ids: ['calc_a1','calc_a2','calc_a3','calc_a4','calc_a5','calc_a6']
       },
-      { id: 'calc_final', label: '70% Examen final (mín. 4/10)' },
-      { id: 'calc_parcial', label: 'Examen parcial (sustituye 50% si ≥5)' }
+      { id: 'calc_final', label: '70% Examen final (mín. 4.0)', grande: true },
+      { id: 'calc_parcial', label: 'Examen parcial (sustituye 50% si ≥5)', grande: true }
     ]
   },
   {
     id: 'electricidad',
     titulo: 'Tecnología Eléctrica',
     campos: [
-      { id: 'elec_lab', label: '15% Laboratorio' },
-      { id: 'elec_parcial', label: '40% Parcial' },
-      { id: 'elec_final', label: '45% Examen Final (mín. 50% global)' }
+      { id: 'elec_lab', label: '15% Laboratorio', grande: true },
+      { id: 'elec_parcial', label: '40% Parcial', grande: true },
+      { id: 'elec_final', label: '45% Examen Final (mín. 5.0)', grande: true }
     ]
   },
   {
     id: 'resistencia',
     titulo: 'Resistencia de Materiales',
     campos: [
-      { id: 'res_lab', label: '5% Laboratorio' },
+      { id: 'res_lab', label: '5% Laboratorio', grande: true },
       {
         tipo: 'grupo',
-        label: 'Parciales (dos de 7.5%)',
+        label: '15% Parciales (2 exámenes)',
         ids: ['res_p1','res_p2']
       },
-      { id: 'res_final', label: '80% Examen Final' }
+      { id: 'res_final', label: '80% Examen Final', grande: true }
     ]
   },
   {
     id: 'procesos',
     titulo: 'Procesos de Fabricación',
     campos: [
-      { id: 'proc_kahoot', label: '10% Kahoot' },
+      { id: 'proc_kahoot', label: '10% Kahoot', grande: true },
       {
         tipo: 'grupo',
         label: '20% Laboratorio (3 partes)',
         ids: ['proc_lab1','proc_lab2','proc_lab3']
       },
-      { id: 'proc_final', label: '70% Examen Final (mín. 25%)' }
+      { id: 'proc_final', label: '70% Examen Final (mín. 2.5)', grande: true }
     ]
   }
 ];
 
-// === RENDER DE MATERIAS ===
+// === RENDER ===
 function renderMaterias() {
   const container = document.getElementById('materias-container');
   container.innerHTML = '';
@@ -176,16 +190,19 @@ function renderMaterias() {
               <div class="flex flex-wrap gap-2 mb-3">
                 ${campo.ids.map(id => `
                   <input id="${id}" type="number" step="0.01" min="0" max="10"
-                    class="input input-bordered input-sm input-nota text-center"
+                    class="input input-bordered input-sm input-nota"
                     placeholder="0.00" />
                 `).join('')}
               </div>
             `;
           } else {
             return `
-              <label class="label" for="${campo.id}"><span class="label-text font-medium">${campo.label}</span></label>
+              <label class="label" for="${campo.id}">
+                <span class="label-text font-medium">${campo.label}</span>
+              </label>
               <input id="${campo.id}" type="number" step="0.01" min="0" max="10"
-                class="input input-bordered w-full" placeholder="0.00" />
+                class="input input-bordered input-grande"
+                placeholder="0.00" />
             `;
           }
         }).join('')}
@@ -207,11 +224,10 @@ const prom = arr => {
   return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0;
 };
 
-// === CÁLCULOS ===
+// === CÁLCULOS CORREGIDOS ===
 function calcTermica() {
-  const a = parseFloat(document.getElementById('term_aula')?.value) || 0;
-  const l = parseFloat(document.getElementById('term_lab')?.value) || 0;
-  const f = parseFloat(document.getElementById('term_final')?.value) || 0;
+  const aula = parseFloat(document.getElementById('term_aula')?.value) || 0;
+  const lab = parseFloat(document.getElementById('term_lab')?.value) || 0;
   const tests = prom([
     document.getElementById('term_t1')?.value,
     document.getElementById('term_t2')?.value,
@@ -220,48 +236,74 @@ function calcTermica() {
     document.getElementById('term_t5')?.value,
     document.getElementById('term_t6')?.value
   ]);
-  const nota = 0.1 * a + 0.1 * l + 0.1 * tests + 0.7 * f;
+  const final = parseFloat(document.getElementById('term_final')?.value) || 0;
+  
+  let nota;
+  if (final < 3.5) {
+    nota = final;
+  } else {
+    nota = 0.1 * aula + 0.1 * lab + 0.1 * tests + 0.7 * final;
+  }
+  
   const elem = document.getElementById('termica_res');
-  const msg = f < 3.5 ? " ❌" : " ✅";
-  elem.textContent = `Térmica: ${nota.toFixed(2)}${msg}`;
+  elem.textContent = `Térmica: ${nota.toFixed(2)} ${final < 3.5 ? '❌ (final < 3.5)' : '✅'}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
 
 function calcCalculo() {
   const labs = [1,2,3,4,5].map(i => parseFloat(document.getElementById(`calc_lab${i}`)?.value) || 0);
-  const ponderLab = labs[0]*0.1 + labs[1]*0.1 + labs[2]*0.1 + labs[3]*0.1 + labs[4]*0.6;
+  const labPond = labs[0]*0.1 + labs[1]*0.1 + labs[2]*0.1 + labs[3]*0.1 + labs[4]*0.6;
   const aulas = [1,2,3,4,5,6].map(i => parseFloat(document.getElementById(`calc_a${i}`)?.value) || 0);
-  const promAula = prom(aulas);
-  const f = parseFloat(document.getElementById('calc_final')?.value) || 0;
-  const p = parseFloat(document.getElementById('calc_parcial')?.value) || 0;
-  let nota = 0.15 * ponderLab + 0.15 * promAula + 0.7 * f;
-  if (p >= 5) nota = Math.max(nota, p * 0.5 + nota * 0.5);
+  const aulaProm = prom(aulas);
+  const final = parseFloat(document.getElementById('calc_final')?.value) || 0;
+  const parcial = parseFloat(document.getElementById('calc_parcial')?.value) || 0;
+  
+  let nota;
+  if (parcial >= 5) {
+    nota = 0.15 * labPond + 0.15 * aulaProm + 0.35 * final + 0.35 * parcial;
+  } else {
+    nota = 0.15 * labPond + 0.15 * aulaProm + 0.7 * final;
+  }
+  
   const elem = document.getElementById('calculo_res');
-  const msg = f < 4 ? " ❌" : " ✅";
-  elem.textContent = `Cálculo: ${nota.toFixed(2)}${msg}`;
+  const msg = final < 4 ? '❌ (final < 4.0)' : '✅';
+  elem.textContent = `Cálculo: ${nota.toFixed(2)} ${msg}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
 
 function calcElectricidad() {
-  const l = parseFloat(document.getElementById('elec_lab')?.value) || 0;
-  const p = parseFloat(document.getElementById('elec_parcial')?.value) || 0;
-  const f = parseFloat(document.getElementById('elec_final')?.value) || 0;
-  const nota = 0.15 * l + 0.4 * p + 0.45 * f;
+  const lab = parseFloat(document.getElementById('elec_lab')?.value) || 0;
+  const parcial = parseFloat(document.getElementById('elec_parcial')?.value) || 0;
+  const final = parseFloat(document.getElementById('elec_final')?.value) || 0;
+  
+  let nota;
+  if (final < 5) {
+    nota = final;
+  } else {
+    if (parcial >= 5) {
+      nota = 0.15 * lab + 0.4 * parcial + 0.45 * final;
+    } else {
+      nota = 0.15 * lab + 0.85 * final;
+    }
+  }
+  
   const elem = document.getElementById('electricidad_res');
-  const msg = f < 5 ? " ❌" : " ✅";
-  elem.textContent = `Eléctrica: ${nota.toFixed(2)}${msg}`;
+  const msg = final < 5 ? '❌ (final < 5.0)' : '✅';
+  elem.textContent = `Eléctrica: ${nota.toFixed(2)} ${msg}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
 
 function calcResistencia() {
-  const l = parseFloat(document.getElementById('res_lab')?.value) || 0;
+  const lab = parseFloat(document.getElementById('res_lab')?.value) || 0;
   const p1 = parseFloat(document.getElementById('res_p1')?.value) || 0;
   const p2 = parseFloat(document.getElementById('res_p2')?.value) || 0;
-  const f = parseFloat(document.getElementById('res_final')?.value) || 0;
-  const nota = 0.05 * l + 0.075 * (p1 + p2) + 0.8 * f;
+  const final = parseFloat(document.getElementById('res_final')?.value) || 0;
+  
+  const nota = 0.05 * lab + 0.075 * p1 + 0.075 * p2 + 0.8 * final;
+  
   const elem = document.getElementById('resistencia_res');
   elem.textContent = `Resistencia: ${nota.toFixed(2)}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
@@ -269,14 +311,23 @@ function calcResistencia() {
 }
 
 function calcProcesos() {
-  const k = parseFloat(document.getElementById('proc_kahoot')?.value) || 0;
-  const f = parseFloat(document.getElementById('proc_final')?.value) || 0;
-  const labs = [1,2,3].map(i => parseFloat(document.getElementById(`proc_lab${i}`)?.value) || 0);
-  const labScore = labs[0] * 0.04 + labs[1] * 0.12 + labs[2] * 0.04;
-  const nota = 0.1 * k + labScore + 0.7 * f;
+  const kahoot = parseFloat(document.getElementById('proc_kahoot')?.value) || 0;
+  const kahootsLab = parseFloat(document.getElementById('proc_lab1')?.value) || 0;
+  const trabajo = parseFloat(document.getElementById('proc_lab2')?.value) || 0;
+  const defensa = parseFloat(document.getElementById('proc_lab3')?.value) || 0;
+  const final = parseFloat(document.getElementById('proc_final')?.value) || 0;
+  
+  let nota;
+  if (final < 2.5) {
+    nota = final;
+  } else {
+    const lab = kahootsLab * 0.04 + trabajo * 0.12 + defensa * 0.04;
+    nota = 0.1 * kahoot + lab + 0.7 * final;
+  }
+  
   const elem = document.getElementById('procesos_res');
-  const msg = f < 2.5 ? " ❌" : " ✅";
-  elem.textContent = `Procesos: ${nota.toFixed(2)}${msg}`;
+  const msg = final < 2.5 ? '❌ (final < 2.5)' : '✅';
+  elem.textContent = `Procesos: ${nota.toFixed(2)} ${msg}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
@@ -304,7 +355,7 @@ document.getElementById('limpiar-btn').addEventListener('click', () => {
   }
 });
 
-// === PICKER DE NOTAS (para móviles) ===
+// === PICKER ===
 const esMovil = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const TODAS_NOTAS = Array.from({length: 901}, (_, i) => ((i + 100) / 100).toFixed(2));
 
@@ -326,11 +377,6 @@ function mostrarPicker(input) {
   picker.classList.remove('hidden');
 }
 
-function ocultarPicker() {
-  document.getElementById('nota-picker').classList.add('hidden');
-}
-
-// Eventos para inputs en móviles
 document.addEventListener('click', (e) => {
   if (e.target.closest('#nota-picker')) return;
   if (e.target.tagName === 'INPUT' && e.target.type === 'number' && esMovil) {
@@ -338,7 +384,7 @@ document.addEventListener('click', (e) => {
     e.target.blur();
     mostrarPicker(e.target);
   } else {
-    ocultarPicker();
+    document.getElementById('nota-picker').classList.add('hidden');
   }
 });
 
@@ -348,7 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('input').forEach(i => cargar(i.id));
   calcAll();
 
-  // Guardar al escribir
   document.querySelectorAll('input').forEach(input => {
     input.addEventListener('input', () => {
       if (!esMovil) {
