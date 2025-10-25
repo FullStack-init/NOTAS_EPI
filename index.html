@@ -1,32 +1,3 @@
-Tienes razón: las fórmulas deben ajustarse **exactamente** a las reglas que proporcionaste. He corregido **todas las lógicas de cálculo** y mantenido el diseño moderno con **DaisyUI**, **modo oscuro por defecto**, **inputs con ancho limitado** y **materias colapsables**.
-
----
-
-### ✅ Correcciones clave en las fórmulas:
-
-1. **Ingeniería Térmica**:  
-   - Si el examen final < 3.5 → **nota = examen final** (no se promedia).
-
-2. **Ampliación de Cálculo**:  
-   - Si parcial ≥ 5 → nota = 0.15·lab + 0.15·aula + 0.35·final + 0.35·parcial  
-   - Si parcial < 5 → nota = 0.15·lab + 0.15·aula + 0.7·final
-
-3. **Tecnología Eléctrica**:  
-   - Si parcial < 5 → examen final vale **85%** (15% lab + 85% final)  
-   - Si parcial ≥ 5 → 15% lab + 40% parcial + 45% final  
-   - **Además**: si final < 5 → **nota = final** (no se promedia)
-
-4. **Resistencia de Materiales**:  
-   - Sin condiciones → promedio directo.
-
-5. **Procesos de Fabricación**:  
-   - Si examen final < 2.5 → **nota = examen final**
-
----
-
-### 💡 Código completo corregido (único archivo HTML):
-
-```html
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
