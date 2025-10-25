@@ -40,7 +40,7 @@
     margin-top: .5rem;
     font-weight: 500;
   }
-  input {
+  input[type="number"] {
     width: 100%;
     padding: .5rem;
     border: 1px solid #ccc;
@@ -49,17 +49,20 @@
     font-size: .95rem;
     box-sizing: border-box;
   }
-  input.small {
-    width: 70px;
-    display: inline-block;
+  /* Inputs de notas: todos con el mismo ancho */
+  .test-group input[type="number"] {
+    width: 5ch; /* Ancho fijo basado en caracteres */
+    padding: .4rem .2rem;
     text-align: center;
-    padding: .4rem;
+    font-size: .95rem;
   }
   .test-group {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-top: .4rem;
+    overflow-x: auto; /* Evita problemas en móviles estrechos */
+    padding-bottom: 4px;
   }
   .resultado {
     margin-top: .6rem;
@@ -117,7 +120,11 @@
   }
 
   @media (max-width: 600px) {
-    input.small { width: 55px; font-size: 1rem; }
+    .test-group input[type="number"] {
+      width: 5ch;
+      font-size: 1rem;
+      padding: .5rem .3rem;
+    }
     .materia { padding: .9rem; }
     h2 { font-size: 1rem; }
     .nota-picker button {
@@ -156,14 +163,14 @@
   <input type="number" id="term_aula" step="0.01" min="0" max="10">
   <label for="term_lab">10% Prácticas de laboratorio (Final)</label>
   <input type="number" id="term_lab" step="0.01" min="0" max="10">
-  <label for="term_tests">10% Proyecto de laboratorio (6 tests: 2 TD, 2 Calor, 2 Otros)</label>
+  <label>10% Proyecto de laboratorio (6 tests: 2 TD, 2 Calor, 2 Otros)</label>
   <div class="test-group">
-    <input class="small" id="term_t1" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="term_t2" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="term_t3" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="term_t4" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="term_t5" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="term_t6" step="0.01" type="number" min="0" max="10">
+    <input id="term_t1" step="0.01" type="number" min="0" max="10" aria-label="Test 1">
+    <input id="term_t2" step="0.01" type="number" min="0" max="10" aria-label="Test 2">
+    <input id="term_t3" step="0.01" type="number" min="0" max="10" aria-label="Test 3">
+    <input id="term_t4" step="0.01" type="number" min="0" max="10" aria-label="Test 4">
+    <input id="term_t5" step="0.01" type="number" min="0" max="10" aria-label="Test 5">
+    <input id="term_t6" step="0.01" type="number" min="0" max="10" aria-label="Test 6">
   </div>
   <label for="term_final">70% Examen Final (mínimo 35%)</label>
   <input type="number" id="term_final" step="0.01" min="0" max="10">
@@ -173,22 +180,22 @@
 <!-- Ampliación de Cálculo -->
 <div class="materia" id="calculo">
   <h2>Ampliación de Cálculo</h2>
-  <label for="calc_labs">15% Laboratorio (5 clases: 10%,10%,10%,10%,60%)</label>
+  <label>15% Laboratorio (5 clases: 10%,10%,10%,10%,60%)</label>
   <div class="test-group">
-    <input class="small" id="calc_lab1" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_lab2" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_lab3" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_lab4" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_lab5" step="0.01" type="number" min="0" max="10">
+    <input id="calc_lab1" step="0.01" type="number" min="0" max="10" aria-label="Lab 1">
+    <input id="calc_lab2" step="0.01" type="number" min="0" max="10" aria-label="Lab 2">
+    <input id="calc_lab3" step="0.01" type="number" min="0" max="10" aria-label="Lab 3">
+    <input id="calc_lab4" step="0.01" type="number" min="0" max="10" aria-label="Lab 4">
+    <input id="calc_lab5" step="0.01" type="number" min="0" max="10" aria-label="Lab 5">
   </div>
-  <label for="calc_aulas">15% Problemas en aula (6 problemas)</label>
+  <label>15% Problemas en aula (6 problemas)</label>
   <div class="test-group">
-    <input class="small" id="calc_a1" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_a2" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_a3" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_a4" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_a5" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="calc_a6" step="0.01" type="number" min="0" max="10">
+    <input id="calc_a1" step="0.01" type="number" min="0" max="10" aria-label="Problema 1">
+    <input id="calc_a2" step="0.01" type="number" min="0" max="10" aria-label="Problema 2">
+    <input id="calc_a3" step="0.01" type="number" min="0" max="10" aria-label="Problema 3">
+    <input id="calc_a4" step="0.01" type="number" min="0" max="10" aria-label="Problema 4">
+    <input id="calc_a5" step="0.01" type="number" min="0" max="10" aria-label="Problema 5">
+    <input id="calc_a6" step="0.01" type="number" min="0" max="10" aria-label="Problema 6">
   </div>
   <label for="calc_final">70% Examen final (mínimo 4/10)</label>
   <input type="number" id="calc_final" step="0.01" min="0" max="10">
@@ -214,10 +221,10 @@
   <h2>Resistencia de Materiales</h2>
   <label for="res_lab">5% Laboratorio</label>
   <input type="number" id="res_lab" step="0.01" min="0" max="10">
-  <label for="res_parciales">Parciales (dos de 7.5%)</label>
+  <label>Parciales (dos de 7.5%)</label>
   <div class="test-group">
-    <input class="small" id="res_p1" step="0.01" type="number" min="0" max="10">
-    <input class="small" id="res_p2" step="0.01" type="number" min="0" max="10">
+    <input id="res_p1" step="0.01" type="number" min="0" max="10" aria-label="Parcial 1">
+    <input id="res_p2" step="0.01" type="number" min="0" max="10" aria-label="Parcial 2">
   </div>
   <label for="res_final">80% Examen Final</label>
   <input type="number" id="res_final" step="0.01" min="0" max="10">
@@ -229,11 +236,11 @@
   <h2>Procesos de Fabricación</h2>
   <label for="proc_kahoot">10% Kahoot</label>
   <input type="number" id="proc_kahoot" step="0.01" min="0" max="10">
-  <label for="proc_labs">20% Laboratorio (3 partes: Kahoots 4%, Trabajo 12%, Defensa 4%)</label>
+  <label>20% Laboratorio (3 partes: Kahoots 4%, Trabajo 12%, Defensa 4%)</label>
   <div class="test-group">
-    <input class="small" id="proc_lab1" step="0.01" placeholder="Kahoots" type="number" min="0" max="10">
-    <input class="small" id="proc_lab2" step="0.01" placeholder="Trabajo" type="number" min="0" max="10">
-    <input class="small" id="proc_lab3" step="0.01" placeholder="Defensa" type="number" min="0" max="10">
+    <input id="proc_lab1" step="0.01" placeholder="Kahoots" type="number" min="0" max="10" aria-label="Kahoots">
+    <input id="proc_lab2" step="0.01" placeholder="Trabajo" type="number" min="0" max="10" aria-label="Trabajo">
+    <input id="proc_lab3" step="0.01" placeholder="Defensa" type="number" min="0" max="10" aria-label="Defensa">
   </div>
   <label for="proc_final">70% Examen Final (mínimo 25%)</label>
   <input type="number" id="proc_final" step="0.01" min="0" max="10">
@@ -343,7 +350,6 @@ function calcProcesos() {
     +document.getElementById('proc_lab2').value || 0,
     +document.getElementById('proc_lab3').value || 0
   ];
-  // Cada parte ya está ponderada: 4% + 12% + 4% = 20%
   const labScore = labs[0] * 0.04 + labs[1] * 0.12 + labs[2] * 0.04;
   const nota = 0.1 * k + labScore + 0.7 * f;
   const elem = document.getElementById('proc_res');
