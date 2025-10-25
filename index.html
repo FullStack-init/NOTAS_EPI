@@ -3,68 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Notas Ingeniería</title>
+<title>Calculadora de Notas • Ingeniería</title>
 <style>
   :root {
-    --color-principal: #003366;
-    --color-acento: #00509e;
-    --bg-body: #121212;
-    --bg-card: #1e1e1e;
-    --text-primary: #f0f0f0;
-    --input-bg: #2a2a2a;
-    --input-border: #444;
-    --shadow: rgba(0,0,0,0.4);
+    --color-principal: #4361ee;
+    --color-secundario: #3f37c9;
+    --color-aprobado: #4cc9f0;
+    --color-suspendido: #f72585;
+    --bg-body: #0f0f15;
+    --bg-card: #1a1a22;
+    --text-primary: #f8f9fa;
+    --input-bg: #252530;
+    --input-border: #3a3a4a;
+    --border-radius: 14px;
+    --shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    --transition: all 0.25s ease;
   }
 
   .light-mode {
-    --bg-body: #f4f6f9;
+    --bg-body: #f8fafc;
     --bg-card: #ffffff;
-    --text-primary: #222222;
-    --input-bg: #ffffff;
-    --input-border: #ccc;
-    --shadow: rgba(0,0,0,0.1);
+    --text-primary: #1e293b;
+    --input-bg: #f1f5f9;
+    --input-border: #cbd5e1;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
-    padding: 1rem;
+    padding: 1.2rem;
     background: var(--bg-body);
     color: var(--text-primary);
-    transition: background 0.3s, color 0.3s;
-  }
-
-  h1 {
-    text-align: center;
-    color: var(--color-principal);
-    margin-bottom: 1rem;
+    transition: var(--transition);
+    line-height: 1.5;
   }
 
   #dark-mode-btn {
     position: fixed;
-    top: 1rem;
-    right: 1rem;
-    background: var(--color-acento);
+    top: 1.2rem;
+    right: 1.2rem;
+    background: var(--color-principal);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
     cursor: pointer;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: var(--transition);
+  }
+
+  #dark-mode-btn:hover {
+    transform: scale(1.08);
+    background: var(--color-secundario);
+  }
+
+  h1 {
+    text-align: center;
+    color: var(--color-principal);
+    margin: 0 0 1.4rem;
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: -0.5px;
   }
 
   .materia {
     background: var(--bg-card);
-    padding: 1rem 1.2rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px var(--shadow);
-    transition: all 0.3s;
+    padding: 1.3rem;
+    margin-bottom: 1.2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
   }
 
   .materia-header {
@@ -72,31 +91,56 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--input-border);
   }
 
   .materia-header h2 {
     color: var(--color-principal);
-    border-left: 4px solid var(--color-principal);
-    padding-left: .5rem;
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .materia-header h2::before {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 18px;
+    background: var(--color-principal);
+    border-radius: 2px;
   }
 
   .toggle-btn {
     background: none;
     border: none;
     color: var(--color-principal);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+
+  .toggle-btn:hover {
+    background: rgba(67, 97, 238, 0.1);
   }
 
   .materia-content {
-    margin-top: 0.8rem;
+    margin-top: 1rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .materia.collapsed .materia-content {
@@ -105,60 +149,80 @@
 
   label {
     display: block;
-    margin-top: .5rem;
-    font-weight: 500;
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    opacity: 0.9;
   }
 
   input[type="number"] {
     width: 100%;
-    padding: .5rem;
+    padding: 0.65rem;
     border: 1px solid var(--input-border);
-    border-radius: 6px;
-    margin-top: .2rem;
-    font-size: .95rem;
-    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 1rem;
     background: var(--input-bg);
     color: var(--text-primary);
+    transition: var(--transition);
   }
 
+  input[type="number"]:focus {
+    outline: none;
+    border-color: var(--color-principal);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+  }
+
+  /* ✅ Cajas de notas pequeñas: ancho máximo para 8 dígitos */
   .test-group input[type="number"] {
-    width: 5ch;
-    padding: .4rem .2rem;
+    width: auto;
+    max-width: 8ch; /* ← suficiente para "10.00" + margen */
+    min-width: 6ch;
+    padding: 0.55rem 0.4rem;
     text-align: center;
-    font-size: .95rem;
+    font-size: 0.95rem;
   }
 
   .test-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: .4rem;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    gap: 10px;
+    margin-top: 0.6rem;
+    padding: 4px 0;
   }
 
   .resultado {
-    margin-top: .6rem;
-    font-weight: bold;
-    color: var(--color-principal);
-    font-size: .95rem;
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 0.6rem;
+    border-radius: 10px;
+    background: rgba(67, 97, 238, 0.08);
+    text-align: center;
   }
 
-  .resultado.aprobado { color: #4caf50; }
-  .resultado.suspendido { color: #f44336; }
+  .resultado.aprobado {
+    color: var(--color-aprobado);
+    background: rgba(76, 201, 240, 0.1);
+  }
+
+  .resultado.suspendido {
+    color: var(--color-suspendido);
+    background: rgba(247, 37, 133, 0.1);
+  }
 
   /* Menú de selección de notas */
   .nota-picker {
     position: fixed;
     background: var(--bg-card);
     border: 1px solid var(--input-border);
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     z-index: 10000;
     display: none;
     max-height: 65vh;
     overflow-y: auto;
-    padding: 10px;
+    padding: 12px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.1rem;
@@ -172,22 +236,21 @@
     display: block;
     width: 100%;
     padding: 14px 0;
-    margin: 4px 0;
-    background: #2a3a5a;
+    margin: 5px 0;
+    background: var(--input-bg);
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     text-align: center;
     font-size: 1.25rem;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--color-principal);
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+    transition: var(--transition);
   }
 
-  .nota-picker button:hover,
-  .nota-picker button:focus {
-    background: #3a4a6a;
-    outline: none;
+  .nota-picker button:hover {
+    background: var(--color-principal);
+    color: white;
   }
 
   .nota-picker button:active {
@@ -196,77 +259,60 @@
 
   @media (max-width: 600px) {
     .test-group input[type="number"] {
-      width: 5ch;
+      max-width: 8ch;
+      min-width: 6ch;
       font-size: 1rem;
-      padding: .5rem .3rem;
+      padding: 0.6rem 0.4rem;
     }
-    .materia { padding: .9rem; }
-    h2 { font-size: 1rem; }
-    .nota-picker button {
-      padding: 18px 0;
-      font-size: 1.4rem;
-    }
+    h1 { font-size: 1.4rem; }
+    .materia { padding: 1.1rem; }
   }
 
   #limpiar-btn {
     display: block;
-    margin: 1.2rem auto;
-    padding: 0.6rem 1.2rem;
-    background: #555;
+    margin: 1.4rem auto;
+    padding: 0.7rem 1.4rem;
+    background: var(--color-principal);
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
+    border-radius: 12px;
+    font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
     color: white;
-    transition: background 0.2s;
-  }
-
-  .light-mode #limpiar-btn {
-    background: #e0e0e0;
-    color: #333;
+    transition: var(--transition);
+    box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
   }
 
   #limpiar-btn:hover {
-    background: #666;
+    background: var(--color-secundario);
+    transform: translateY(-2px);
   }
 
-  .light-mode #limpiar-btn:hover {
-    background: #cfcfcf;
+  #promedio {
+    text-align: center;
+    margin-top: 1.2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.8rem;
+    background: rgba(67, 97, 238, 0.1);
+    border-radius: 12px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
   }
 </style>
 </head>
 <body class="dark-mode">
 
-<button id="dark-mode-btn" onclick="toggleDarkMode()">🌙</button>
+<button id="dark-mode-btn" aria-label="Cambiar modo claro/oscuro">🌙</button>
 
-<h1>Calculadora de Notas de Ingeniería</h1>
-
-<!-- Función para crear materia -->
-<script>
-  function crearMateria(id, titulo, contenidoHtml) {
-    const materia = document.createElement('div');
-    materia.className = 'materia';
-    materia.id = id;
-    materia.innerHTML = `
-      <div class="materia-header">
-        <h2>${titulo}</h2>
-        <button class="toggle-btn" aria-label="Alternar ${titulo}">▼</button>
-      </div>
-      <div class="materia-content">
-        ${contenidoHtml}
-        <div id="${id}_res" class="resultado" aria-live="polite"></div>
-      </div>
-    `;
-    return materia;
-  }
-</script>
+<h1>🎓 Calculadora de Notas • Ingeniería</h1>
 
 <div id="materias-container"></div>
 
-<button id="limpiar-btn" onclick="limpiarTodo()">Limpiar todas las notas</button>
+<button id="limpiar-btn" onclick="limpiarTodo()">🗑️ Limpiar todas las notas</button>
 
-<div id="promedio" class="resultado" style="text-align:center;margin-top:1rem;font-size:1.1rem;" aria-live="polite"></div>
+<div id="promedio" class="resultado" aria-live="polite"></div>
 
 <div id="nota-picker" class="nota-picker"></div>
 
@@ -289,10 +335,9 @@ function toggleDarkMode() {
 }
 
 // Aplicar tema al cargar
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem('theme') || 'dark';
   if (savedTheme === 'light') {
-    document.body.classList.remove('dark-mode');
     document.body.classList.add('light-mode');
     document.getElementById('dark-mode-btn').textContent = '☀️';
   } else {
@@ -301,7 +346,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// === CONTENIDO DE MATERIAS ===
+// === RENDER MATERIAS ===
 const materiasData = [
   {
     id: 'termica',
@@ -311,7 +356,7 @@ const materiasData = [
       <input type="number" id="term_aula" step="0.01" min="0" max="10">
       <label for="term_lab">10% Prácticas de laboratorio (Final)</label>
       <input type="number" id="term_lab" step="0.01" min="0" max="10">
-      <label>10% Proyecto de laboratorio (6 tests: 2 TD, 2 Calor, 2 Otros)</label>
+      <label>10% Proyecto de laboratorio (6 tests)</label>
       <div class="test-group">
         <input id="term_t1" step="0.01" type="number" min="0" max="10" aria-label="Test 1">
         <input id="term_t2" step="0.01" type="number" min="0" max="10" aria-label="Test 2">
@@ -320,7 +365,7 @@ const materiasData = [
         <input id="term_t5" step="0.01" type="number" min="0" max="10" aria-label="Test 5">
         <input id="term_t6" step="0.01" type="number" min="0" max="10" aria-label="Test 6">
       </div>
-      <label for="term_final">70% Examen Final (mínimo 35%)</label>
+      <label for="term_final">70% Examen Final (mín. 35%)</label>
       <input type="number" id="term_final" step="0.01" min="0" max="10">
     `
   },
@@ -328,7 +373,7 @@ const materiasData = [
     id: 'calculo',
     titulo: 'Ampliación de Cálculo',
     html: `
-      <label>15% Laboratorio (5 clases: 10%,10%,10%,10%,60%)</label>
+      <label>15% Laboratorio (5 clases)</label>
       <div class="test-group">
         <input id="calc_lab1" step="0.01" type="number" min="0" max="10" aria-label="Lab 1">
         <input id="calc_lab2" step="0.01" type="number" min="0" max="10" aria-label="Lab 2">
@@ -336,7 +381,7 @@ const materiasData = [
         <input id="calc_lab4" step="0.01" type="number" min="0" max="10" aria-label="Lab 4">
         <input id="calc_lab5" step="0.01" type="number" min="0" max="10" aria-label="Lab 5">
       </div>
-      <label>15% Problemas en aula (6 problemas)</label>
+      <label>15% Problemas en aula (6)</label>
       <div class="test-group">
         <input id="calc_a1" step="0.01" type="number" min="0" max="10" aria-label="Problema 1">
         <input id="calc_a2" step="0.01" type="number" min="0" max="10" aria-label="Problema 2">
@@ -345,9 +390,9 @@ const materiasData = [
         <input id="calc_a5" step="0.01" type="number" min="0" max="10" aria-label="Problema 5">
         <input id="calc_a6" step="0.01" type="number" min="0" max="10" aria-label="Problema 6">
       </div>
-      <label for="calc_final">70% Examen final (mínimo 4/10)</label>
+      <label for="calc_final">70% Examen final (mín. 4/10)</label>
       <input type="number" id="calc_final" step="0.01" min="0" max="10">
-      <label for="calc_parcial">Examen parcial (puede sustituir 50% si ≥5/10)</label>
+      <label for="calc_parcial">Examen parcial (sustituye 50% si ≥5)</label>
       <input type="number" id="calc_parcial" step="0.01" min="0" max="10">
     `
   },
@@ -359,7 +404,7 @@ const materiasData = [
       <input type="number" id="elec_lab" step="0.01" min="0" max="10">
       <label for="elec_parcial">40% Parcial</label>
       <input type="number" id="elec_parcial" step="0.01" min="0" max="10">
-      <label for="elec_final">45% Examen Final (mínimo 50% global y ≥20% por ejercicio)</label>
+      <label for="elec_final">45% Examen Final (mín. 50% global)</label>
       <input type="number" id="elec_final" step="0.01" min="0" max="10">
     `
   },
@@ -384,26 +429,34 @@ const materiasData = [
     html: `
       <label for="proc_kahoot">10% Kahoot</label>
       <input type="number" id="proc_kahoot" step="0.01" min="0" max="10">
-      <label>20% Laboratorio (3 partes: Kahoots 4%, Trabajo 12%, Defensa 4%)</label>
+      <label>20% Laboratorio (3 partes)</label>
       <div class="test-group">
         <input id="proc_lab1" step="0.01" placeholder="Kahoots" type="number" min="0" max="10" aria-label="Kahoots">
         <input id="proc_lab2" step="0.01" placeholder="Trabajo" type="number" min="0" max="10" aria-label="Trabajo">
         <input id="proc_lab3" step="0.01" placeholder="Defensa" type="number" min="0" max="10" aria-label="Defensa">
       </div>
-      <label for="proc_final">70% Examen Final (mínimo 25%)</label>
+      <label for="proc_final">70% Examen Final (mín. 25%)</label>
       <input type="number" id="proc_final" step="0.01" min="0" max="10">
     `
   }
 ];
 
-// Renderizar materias
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('materias-container');
   materiasData.forEach(m => {
-    const materiaEl = crearMateria(m.id, m.titulo, m.html);
+    const materiaEl = document.createElement('div');
+    materiaEl.className = 'materia';
+    materiaEl.id = m.id;
+    materiaEl.innerHTML = `
+      <div class="materia-header">
+        <h2>${m.titulo}</h2>
+        <button class="toggle-btn" aria-label="Alternar ${m.titulo}">▼</button>
+      </div>
+      <div class="materia-content">${m.html}</div>
+      <div id="${m.id}_res" class="resultado" aria-live="polite"></div>
+    `;
     container.appendChild(materiaEl);
-    
-    // Añadir evento al botón de toggle
+
     const toggleBtn = materiaEl.querySelector('.toggle-btn');
     toggleBtn.addEventListener('click', () => {
       materiaEl.classList.toggle('collapsed');
@@ -412,20 +465,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// === UTILIDADES ===
-function guardar(id, v) {
-  localStorage.setItem(id, v);
-}
+// === UTILIDADES Y CÁLCULOS ===
+function guardar(id, v) { localStorage.setItem(id, v); }
 function cargar(id) {
   const v = localStorage.getItem(id);
-  if (v !== null) document.getElementById(id).value = v;
+  if (v !== null) document.getElementById(id)?.value = v;
 }
 function prom(arr) {
   const nums = arr.map(x => +x || 0);
-  return nums.reduce((a, b) => a + b, 0) / nums.length;
+  return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0;
 }
 
-// === CÁLCULOS ===
+// (Las funciones calcTermica, calcCalculo, etc., se mantienen igual que antes)
 function calcTermica() {
   const a = +document.getElementById('term_aula').value || 0;
   const l = +document.getElementById('term_lab').value || 0;
@@ -440,7 +491,7 @@ function calcTermica() {
   ]);
   const nota = 0.1 * a + 0.1 * l + 0.1 * tests + 0.7 * f;
   const elem = document.getElementById('termica_res');
-  const msg = f < 3.5 ? " ❌ (<35%)" : " ✅";
+  const msg = f < 3.5 ? " ❌" : " ✅";
   elem.textContent = `Térmica: ${nota.toFixed(2)}${msg}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
@@ -469,7 +520,7 @@ function calcCalculo() {
   let nota = 0.15 * ponderLab + 0.15 * promAula + 0.7 * f;
   if (p >= 5) nota = Math.max(nota, p * 0.5 + nota * 0.5);
   const elem = document.getElementById('calculo_res');
-  const msg = f < 4 ? " ❌ (<4/10)" : " ✅";
+  const msg = f < 4 ? " ❌" : " ✅";
   elem.textContent = `Cálculo: ${nota.toFixed(2)}${msg}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
@@ -481,7 +532,7 @@ function calcElectricidad() {
   const f = +document.getElementById('elec_final').value || 0;
   const nota = 0.15 * l + 0.4 * p + 0.45 * f;
   const elem = document.getElementById('electricidad_res');
-  const msg = f < 5 ? " ❌ (<50%)" : " ✅";
+  const msg = f < 5 ? " ❌" : " ✅";
   elem.textContent = `Eléctrica: ${nota.toFixed(2)}${msg}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
@@ -510,7 +561,7 @@ function calcProcesos() {
   const labScore = labs[0] * 0.04 + labs[1] * 0.12 + labs[2] * 0.04;
   const nota = 0.1 * k + labScore + 0.7 * f;
   const elem = document.getElementById('procesos_res');
-  const msg = f < 2.5 ? " ❌ (<25%)" : " ✅";
+  const msg = f < 2.5 ? " ❌" : " ✅";
   elem.textContent = `Procesos: ${nota.toFixed(2)}${msg}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
@@ -526,11 +577,10 @@ function calcAll() {
   ];
   const total = prom(notas);
   if (!isNaN(total)) {
-    document.getElementById('promedio').textContent = 'Promedio general: ' + total.toFixed(2);
+    document.getElementById('promedio').textContent = '📊 Promedio general: ' + total.toFixed(2);
   }
 }
 
-// === LIMPIAR ===
 function limpiarTodo() {
   if (confirm('¿Borrar todas las notas?')) {
     document.querySelectorAll('input').forEach(i => {
@@ -542,17 +592,13 @@ function limpiarTodo() {
 }
 
 // === PICKER DE NOTAS ===
-const TODAS_NOTAS = [];
-for (let i = 100; i <= 1000; i++) {
-  TODAS_NOTAS.push((i / 100).toFixed(2));
-}
+const TODAS_NOTAS = Array.from({length: 901}, (_, i) => ((i + 100) / 100).toFixed(2));
 
 let inputActivo = null;
 
 function mostrarPicker(input) {
   const picker = document.getElementById('nota-picker');
   picker.innerHTML = '';
-  
   TODAS_NOTAS.forEach(nota => {
     const btn = document.createElement('button');
     btn.textContent = nota;
@@ -564,7 +610,6 @@ function mostrarPicker(input) {
     };
     picker.appendChild(btn);
   });
-  
   picker.style.display = 'block';
   inputActivo = input;
 }
