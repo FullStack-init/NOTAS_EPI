@@ -29,6 +29,12 @@
     }
     .resultado.aprobado { @apply bg-success/10 text-success; }
     .resultado.suspendido { @apply bg-error/10 text-error; }
+    .nota-item {
+      @apply flex flex-col items-center;
+    }
+    .nota-item-label {
+      @apply text-xs text-gray-500 mt-1;
+    }
   </style>
 </head>
 <body class="bg-base-100 text-base-content min-h-screen p-4 md:p-6">
@@ -73,14 +79,21 @@ const materiasData = [
     id: 'termica',
     titulo: 'Ingeniería Térmica',
     campos: [
-      { id: 'term_aula', label: '10% Puntos en aula', grande: true },
-      { id: 'term_lab', label: '10% Prácticas de laboratorio', grande: true },
+      { id: 'term_aula', label: 'Puntos por participación en el aula', globalPerc: '10%' },
+      { id: 'term_lab', label: 'Prácticas de Laboratorio', globalPerc: '10%' },
       {
         tipo: 'grupo',
-        label: '10% Proyecto de laboratorio (6 tests)',
-        ids: ['term_t1','term_t2','term_t3','term_t4','term_t5','term_t6']
+        label: 'Proyecto de Laboratorio (6 tests iguales)',
+        items: [
+          { id: 'term_t1', label: 'Test 1', globalPerc: '1.67%' },
+          { id: 'term_t2', label: 'Test 2', globalPerc: '1.67%' },
+          { id: 'term_t3', label: 'Test 3', globalPerc: '1.67%' },
+          { id: 'term_t4', label: 'Test 4', globalPerc: '1.67%' },
+          { id: 'term_t5', label: 'Test 5', globalPerc: '1.67%' },
+          { id: 'term_t6', label: 'Test 6', globalPerc: '1.67%' }
+        ]
       },
-      { id: 'term_final', label: '70% Examen Final (mín. 3.5)', grande: true }
+      { id: 'term_final', label: 'Examen Final (mín. 3.5/10)', globalPerc: '70%' }
     ]
   },
   {
@@ -89,51 +102,71 @@ const materiasData = [
     campos: [
       {
         tipo: 'grupo',
-        label: '15% Laboratorio (5 clases)',
-        ids: ['calc_lab1','calc_lab2','calc_lab3','calc_lab4','calc_lab5']
+        label: 'Laboratorio (15% total)',
+        items: [
+          { id: 'calc_lab1', label: 'Clase 1', globalPerc: '1.5%' },
+          { id: 'calc_lab2', label: 'Clase 2', globalPerc: '1.5%' },
+          { id: 'calc_lab3', label: 'Clase 3', globalPerc: '1.5%' },
+          { id: 'calc_lab4', label: 'Clase 4', globalPerc: '1.5%' },
+          { id: 'calc_lab5', label: 'Clase 5', globalPerc: '9%' }
+        ]
       },
       {
         tipo: 'grupo',
-        label: '15% Problemas en aula (6)',
-        ids: ['calc_a1','calc_a2','calc_a3','calc_a4','calc_a5','calc_a6']
+        label: 'Problemas en aula (15% total → 2.5% c/u)',
+        items: [
+          { id: 'calc_a1', label: 'Ejercicio 1', globalPerc: '2.5%' },
+          { id: 'calc_a2', label: 'Ejercicio 2', globalPerc: '2.5%' },
+          { id: 'calc_a3', label: 'Ejercicio 3', globalPerc: '2.5%' },
+          { id: 'calc_a4', label: 'Ejercicio 4', globalPerc: '2.5%' },
+          { id: 'calc_a5', label: 'Ejercicio 5', globalPerc: '2.5%' },
+          { id: 'calc_a6', label: 'Ejercicio 6', globalPerc: '2.5%' }
+        ]
       },
-      { id: 'calc_final', label: '70% Examen final (mín. 4.0)', grande: true },
-      { id: 'calc_parcial', label: 'Examen parcial (sustituye 50% si ≥5)', grande: true }
+      { id: 'calc_final', label: 'Examen final (mín. 4.0/10)', globalPerc: '70%' },
+      { id: 'calc_parcial', label: 'Examen parcial (sustituye 50% del final si ≥5.0)', globalPerc: '—' }
     ]
   },
   {
     id: 'electricidad',
     titulo: 'Tecnología Eléctrica',
     campos: [
-      { id: 'elec_lab', label: '15% Laboratorio', grande: true },
-      { id: 'elec_parcial', label: '40% Parcial', grande: true },
-      { id: 'elec_final', label: '45% Examen Final (mín. 5.0)', grande: true }
+      { id: 'elec_lab', label: 'Laboratorio', globalPerc: '15%' },
+      { id: 'elec_parcial', label: 'Parcial', globalPerc: '40%' },
+      { id: 'elec_final', label: 'Examen Final (mín. 5.0/10)', globalPerc: '45%' }
     ]
   },
   {
     id: 'resistencia',
     titulo: 'Resistencia de Materiales',
     campos: [
-      { id: 'res_lab', label: '5% Laboratorio', grande: true },
+      { id: 'res_lab', label: 'Laboratorio (asistencia)', globalPerc: '5%' },
       {
         tipo: 'grupo',
-        label: '15% Parciales (2 exámenes)',
-        ids: ['res_p1','res_p2']
+        label: 'Parciales (15% total → 7.5% c/u)',
+        items: [
+          { id: 'res_p1', label: 'Parcial 1', globalPerc: '7.5%' },
+          { id: 'res_p2', label: 'Parcial 2', globalPerc: '7.5%' }
+        ]
       },
-      { id: 'res_final', label: '80% Examen Final', grande: true }
+      { id: 'res_final', label: 'Examen Final', globalPerc: '80%' }
     ]
   },
   {
     id: 'procesos',
     titulo: 'Procesos de Fabricación',
     campos: [
-      { id: 'proc_kahoot', label: '10% Kahoot', grande: true },
+      { id: 'proc_kahoot', label: 'Kahoot', globalPerc: '10%' },
       {
         tipo: 'grupo',
-        label: '20% Laboratorio (3 partes)',
-        ids: ['proc_lab1','proc_lab2','proc_lab3']
+        label: 'Laboratorio (20% total)',
+        items: [
+          { id: 'proc_lab1', label: 'Kahoots del laboratorio', globalPerc: '4%' },
+          { id: 'proc_lab2', label: 'Trabajo entregado', globalPerc: '12%' },
+          { id: 'proc_lab3', label: 'Defensa oral', globalPerc: '4%' }
+        ]
       },
-      { id: 'proc_final', label: '70% Examen Final (mín. 2.5)', grande: true }
+      { id: 'proc_final', label: 'Examen Final (mín. 2.5/10)', globalPerc: '70%' }
     ]
   }
 ];
@@ -157,18 +190,21 @@ function renderMaterias() {
           if (campo.tipo === 'grupo') {
             return `
               <label class="label"><span class="label-text font-medium">${campo.label}</span></label>
-              <div class="flex flex-wrap gap-2 mb-3">
-                ${campo.ids.map(id => `
-                  <input id="${id}" type="number" step="0.01" min="0" max="10"
-                    class="input input-bordered input-sm input-nota"
-                    placeholder="0.00" inputmode="decimal" />
+              <div class="flex flex-wrap gap-2 mb-3 justify-center">
+                ${campo.items.map(item => `
+                  <div class="nota-item">
+                    <input id="${item.id}" type="number" step="0.01" min="0" max="10"
+                      class="input input-bordered input-sm input-nota"
+                      placeholder="0.00" inputmode="decimal" />
+                    <span class="nota-item-label">${item.label} (${item.globalPerc})</span>
+                  </div>
                 `).join('')}
               </div>
             `;
           } else {
             return `
               <label class="label" for="${campo.id}">
-                <span class="label-text font-medium">${campo.label}</span>
+                <span class="label-text font-medium">${campo.label} (${campo.globalPerc})</span>
               </label>
               <input id="${campo.id}" type="number" step="0.01" min="0" max="10"
                 class="input input-bordered input-grande"
@@ -211,26 +247,41 @@ function calcTermica() {
   let nota = final < 3.5 ? final : 0.1 * aula + 0.1 * lab + 0.1 * tests + 0.7 * final;
   
   const elem = document.getElementById('termica_res');
-  elem.textContent = `Térmica: ${nota.toFixed(2)} ${final < 3.5 ? '❌ (final < 3.5)' : '✅'}`;
+  const estado = final < 3.5 ? 
+    '❌ Suspendido (examen final < 3.5 → no se promedia)' : 
+    (nota >= 5 ? '✅ Aprobado' : '❌ Suspendido');
+  elem.textContent = `Térmica: ${nota.toFixed(2)} → ${estado}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
 
 function calcCalculo() {
   const labs = [1,2,3,4,5].map(i => parseFloat(document.getElementById(`calc_lab${i}`)?.value) || 0);
-  const labPond = labs[0]*0.1 + labs[1]*0.1 + labs[2]*0.1 + labs[3]*0.1 + labs[4]*0.6;
+  const labNota = labs[0]*0.1 + labs[1]*0.1 + labs[2]*0.1 + labs[3]*0.1 + labs[4]*0.6; // nota del laboratorio (0-10)
   const aulas = [1,2,3,4,5,6].map(i => parseFloat(document.getElementById(`calc_a${i}`)?.value) || 0);
   const aulaProm = prom(aulas);
   const final = parseFloat(document.getElementById('calc_final')?.value) || 0;
   const parcial = parseFloat(document.getElementById('calc_parcial')?.value) || 0;
   
-  let nota = parcial >= 5 
-    ? 0.15 * labPond + 0.15 * aulaProm + 0.35 * final + 0.35 * parcial
-    : 0.15 * labPond + 0.15 * aulaProm + 0.7 * final;
-  
+  let nota;
+  if (final < 4.0) {
+    nota = final;
+  } else {
+    if (parcial >= 5.0) {
+      nota = 0.15 * labNota + 0.15 * aulaProm + 0.5 * final + 0.5 * parcial;
+    } else {
+      nota = 0.15 * labNota + 0.15 * aulaProm + 0.7 * final;
+    }
+  }
+
   const elem = document.getElementById('calculo_res');
-  const msg = final < 4 ? '❌ (final < 4.0)' : '✅';
-  elem.textContent = `Cálculo: ${nota.toFixed(2)} ${msg}`;
+  let estado;
+  if (final < 4.0) {
+    estado = '❌ Suspendido (examen final < 4.0 → no se promedia)';
+  } else {
+    estado = nota >= 5 ? '✅ Aprobado' : '❌ Suspendido';
+  }
+  elem.textContent = `Cálculo: ${nota.toFixed(2)} → ${estado}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
@@ -241,17 +292,21 @@ function calcElectricidad() {
   const final = parseFloat(document.getElementById('elec_final')?.value) || 0;
   
   let nota;
-  if (final < 5) {
+  if (final < 5.0) {
     nota = final;
   } else {
-    nota = parcial >= 5 
-      ? 0.15 * lab + 0.4 * parcial + 0.45 * final
-      : 0.15 * lab + 0.85 * final;
+    if (parcial >= 5.0) {
+      nota = 0.15 * lab + 0.4 * parcial + 0.45 * final;
+    } else {
+      nota = 0.15 * lab + 0.85 * final;
+    }
   }
   
   const elem = document.getElementById('electricidad_res');
-  const msg = final < 5 ? '❌ (final < 5.0)' : '✅';
-  elem.textContent = `Eléctrica: ${nota.toFixed(2)} ${msg}`;
+  const estado = final < 5.0 ? 
+    '❌ Suspendido (examen final < 5.0 → no se promedia)' : 
+    (nota >= 5 ? '✅ Aprobado' : '❌ Suspendido');
+  elem.textContent = `Eléctrica: ${nota.toFixed(2)} → ${estado}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
@@ -265,25 +320,32 @@ function calcResistencia() {
   const nota = 0.05 * lab + 0.075 * p1 + 0.075 * p2 + 0.8 * final;
   
   const elem = document.getElementById('resistencia_res');
-  elem.textContent = `Resistencia: ${nota.toFixed(2)}`;
+  const estado = nota >= 5 ? '✅ Aprobado' : '❌ Suspendido';
+  elem.textContent = `Resistencia: ${nota.toFixed(2)} → ${estado}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
 
 function calcProcesos() {
   const kahoot = parseFloat(document.getElementById('proc_kahoot')?.value) || 0;
-  const kahootsLab = parseFloat(document.getElementById('proc_lab1')?.value) || 0;
+  const labKahoots = parseFloat(document.getElementById('proc_lab1')?.value) || 0;
   const trabajo = parseFloat(document.getElementById('proc_lab2')?.value) || 0;
   const defensa = parseFloat(document.getElementById('proc_lab3')?.value) || 0;
   const final = parseFloat(document.getElementById('proc_final')?.value) || 0;
   
-  let nota = final < 2.5 
-    ? final 
-    : 0.1 * kahoot + (kahootsLab * 0.04 + trabajo * 0.12 + defensa * 0.04) + 0.7 * final;
+  let nota;
+  if (final < 2.5) {
+    nota = final;
+  } else {
+    const labTotal = 0.04 * labKahoots + 0.12 * trabajo + 0.04 * defensa;
+    nota = 0.1 * kahoot + labTotal + 0.7 * final;
+  }
   
   const elem = document.getElementById('procesos_res');
-  const msg = final < 2.5 ? '❌ (final < 2.5)' : '✅';
-  elem.textContent = `Procesos: ${nota.toFixed(2)} ${msg}`;
+  const estado = final < 2.5 ? 
+    '❌ Suspendido (examen final < 2.5 → no se promedia)' : 
+    (nota >= 5 ? '✅ Aprobado' : '❌ Suspendido');
+  elem.textContent = `Procesos: ${nota.toFixed(2)} → ${estado}`;
   elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
   return nota;
 }
@@ -317,7 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('input').forEach(i => cargar(i.id));
   calcAll();
 
-  // Guardar y recalcular al escribir
   document.querySelectorAll('input[type="number"]').forEach(input => {
     input.addEventListener('input', () => {
       guardar(input.id, input.value);
