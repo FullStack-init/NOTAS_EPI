@@ -52,7 +52,6 @@
     <button id="limpiar-btn" class="btn btn-error btn-md md:btn-lg">🗑️ Limpiar todas las notas</button>
   </div>
   <div id="promedio" class="resultado bg-principal/10 text-principal" aria-live="polite"></div>
-  <div id="nota-picker" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-base-100 shadow-xl rounded-2xl p-3 max-w-xs w-full hidden max-h-80 overflow-y-auto"></div>
 </div>
 
 <script>
@@ -162,7 +161,7 @@ function renderMaterias() {
                 ${campo.ids.map(id => `
                   <input id="${id}" type="number" step="0.01" min="0" max="10"
                     class="input input-bordered input-sm input-nota"
-                    placeholder="0.00" />
+                    placeholder="0.00" inputmode="decimal" />
                 `).join('')}
               </div>
             `;
@@ -173,7 +172,7 @@ function renderMaterias() {
               </label>
               <input id="${campo.id}" type="number" step="0.01" min="0" max="10"
                 class="input input-bordered input-grande"
-                placeholder="0.00" />
+                placeholder="0.00" inputmode="decimal" />
             `;
           }
         }).join('')}
@@ -209,12 +208,7 @@ function calcTermica() {
   ]);
   const final = parseFloat(document.getElementById('term_final')?.value) || 0;
   
-  let nota;
-  if (final < 3.5) {
-    nota = final;
-  } else {
-    nota = 0.1 * aula + 0.1 * lab + 0.1 * tests + 0.7 * final;
-  }
+  let nota = final < 3.5 ? final : 0.1 * aula + 0.1 * lab + 0.1 * tests + 0.7 * final;
   
   const elem = document.getElementById('termica_res');
   elem.textContent = `Térmica: ${nota.toFixed(2)} ${final < 3.5 ? '❌ (final < 3.5)' : '✅'}`;
@@ -230,12 +224,9 @@ function calcCalculo() {
   const final = parseFloat(document.getElementById('calc_final')?.value) || 0;
   const parcial = parseFloat(document.getElementById('calc_parcial')?.value) || 0;
   
-  let nota;
-  if (parcial >= 5) {
-    nota = 0.15 * labPond + 0.15 * aulaProm + 0.35 * final + 0.35 * parcial;
-  } else {
-    nota = 0.15 * labPond + 0.15 * aulaProm + 0.7 * final;
-  }
+  let nota = parcial >= 5 
+    ? 0.15 * labPond + 0.15 * aulaProm + 0.35 * final + 0.35 * parcial
+    : 0.15 * labPond + 0.15 * aulaProm + 0.7 * final;
   
   const elem = document.getElementById('calculo_res');
   const msg = final < 4 ? '❌ (final < 4.0)' : '✅';
@@ -253,11 +244,9 @@ function calcElectricidad() {
   if (final < 5) {
     nota = final;
   } else {
-    if (parcial >= 5) {
-      nota = 0.15 * lab + 0.4 * parcial + 0.45 * final;
-    } else {
-      nota = 0.15 * lab + 0.85 * final;
-    }
+    nota = parcial >= 5 
+      ? 0.15 * lab + 0.4 * parcial + 0.45 * final
+      : 0.15 * lab + 0.85 * final;
   }
   
   const elem = document.getElementById('electricidad_res');
@@ -288,13 +277,9 @@ function calcProcesos() {
   const defensa = parseFloat(document.getElementById('proc_lab3')?.value) || 0;
   const final = parseFloat(document.getElementById('proc_final')?.value) || 0;
   
-  let nota;
-  if (final < 2.5) {
-    nota = final;
-  } else {
-    const lab = kahootsLab * 0.04 + trabajo * 0.12 + defensa * 0.04;
-    nota = 0.1 * kahoot + lab + 0.7 * final;
-  }
+  let nota = final < 2.5 
+    ? final 
+    : 0.1 * kahoot + (kahootsLab * 0.04 + trabajo * 0.12 + defensa * 0.04) + 0.7 * final;
   
   const elem = document.getElementById('procesos_res');
   const msg = final < 2.5 ? '❌ (final < 2.5)' : '✅';
@@ -326,51 +311,17 @@ document.getElementById('limpiar-btn').addEventListener('click', () => {
   }
 });
 
-// === PICKER ===
-const esMovil = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-const TODAS_NOTAS = Array.from({length: 901}, (_, i) => ((i + 100) / 100).toFixed(2));
-
-function mostrarPicker(input) {
-  const picker = document.getElementById('nota-picker');
-  picker.innerHTML = '';
-  TODAS_NOTAS.forEach(nota => {
-    const btn = document.createElement('button');
-    btn.className = 'btn btn-outline w-full my-1 text-lg';
-    btn.textContent = nota;
-    btn.onclick = () => {
-      input.value = nota;
-      guardar(input.id, nota);
-      calcAll();
-      picker.classList.add('hidden');
-    };
-    picker.appendChild(btn);
-  });
-  picker.classList.remove('hidden');
-}
-
-document.addEventListener('click', (e) => {
-  if (e.target.closest('#nota-picker')) return;
-  if (e.target.tagName === 'INPUT' && e.target.type === 'number' && esMovil) {
-    e.preventDefault();
-    e.target.blur();
-    mostrarPicker(e.target);
-  } else {
-    document.getElementById('nota-picker').classList.add('hidden');
-  }
-});
-
 // === INICIALIZAR ===
 document.addEventListener('DOMContentLoaded', () => {
   renderMaterias();
   document.querySelectorAll('input').forEach(i => cargar(i.id));
   calcAll();
 
-  document.querySelectorAll('input').forEach(input => {
+  // Guardar y recalcular al escribir
+  document.querySelectorAll('input[type="number"]').forEach(input => {
     input.addEventListener('input', () => {
-      if (!esMovil) {
-        guardar(input.id, input.value);
-        calcAll();
-      }
+      guardar(input.id, input.value);
+      calcAll();
     });
   });
 });
