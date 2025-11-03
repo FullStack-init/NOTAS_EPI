@@ -114,14 +114,12 @@ const materiasData = [
       },
       {
         tipo: 'grupo',
-        label: 'Problemas en aula (15% total → 2.5% c/u)',
+        label: 'Problemas en aula (10% total → 2.5% c/u)',
         items: [
           { id: 'calc_a1', label: 'Ejercicio 1', globalPerc: '2.5%' },
           { id: 'calc_a2', label: 'Ejercicio 2', globalPerc: '2.5%' },
           { id: 'calc_a3', label: 'Ejercicio 3', globalPerc: '2.5%' },
-          { id: 'calc_a4', label: 'Ejercicio 4', globalPerc: '2.5%' },
-          { id: 'calc_a5', label: 'Ejercicio 5', globalPerc: '2.5%' },
-          { id: 'calc_a6', label: 'Ejercicio 6', globalPerc: '2.5%' }
+          { id: 'calc_a4', label: 'Ejercicio 4', globalPerc: '2.5%' }
         ]
       },
       { id: 'calc_final', label: 'Examen final (mín. 4.0/10)', globalPerc: '70%' },
@@ -261,7 +259,8 @@ function calcTermica() {
 function calcCalculo() {
   const labs = [1,2,3,4,5].map(i => parseFloat(document.getElementById(`calc_lab${i}`)?.value) || 0);
   const labNota = labs[0]*0.1 + labs[1]*0.1 + labs[2]*0.1 + labs[3]*0.1 + labs[4]*0.6;
-  const aulas = [1,2,3,4,5,6].map(i => parseFloat(document.getElementById(`calc_a${i}`)?.value) || 0);
+  // Cambiado: ahora solo 4 ejercicios en aula, 10% total -> 2.5% c/u -> 0.1 * promedio
+  const aulas = [1,2,3,4].map(i => parseFloat(document.getElementById(`calc_a${i}`)?.value) || 0);
   const aulaProm = prom(aulas);
   const final = parseFloat(document.getElementById('calc_final')?.value) || 0;
   const parcial = parseFloat(document.getElementById('calc_parcial')?.value) || 0;
@@ -271,9 +270,11 @@ function calcCalculo() {
     nota = final;
   } else {
     if (parcial >= 5.0) {
-      nota = 0.15 * labNota + 0.15 * aulaProm + 0.5 * final + 0.5 * parcial;
+      // 15% lab + 10% aula + 50% final + 50% parcial (si aplica)
+      nota = 0.15 * labNota + 0.10 * aulaProm + 0.5 * final + 0.5 * parcial;
     } else {
-      nota = 0.15 * labNota + 0.15 * aulaProm + 0.7 * final;
+      // 15% lab + 10% aula + 70% final
+      nota = 0.15 * labNota + 0.10 * aulaProm + 0.7 * final;
     }
   }
 
