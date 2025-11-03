@@ -1,76 +1,55 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es" data-theme="dark"> <!-- Puedes cambiar 'dark' por 'light' si prefieres -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Notas • Ingeniería</title>
   <!-- Tailwind + DaisyUI -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
   <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            principal: "#4361ee",
-            aprobado: "#4cc9f0",
-            suspendido: "#f72585"
+            // Puedes personalizar colores aquí si lo deseas
+            // principal: "#4361ee",
+            // aprobado: "#4cc9f0",
+            // suspendido: "#f72585"
           }
         }
       }
     };
   </script>
   <style>
+    /* Ajustes menores si es necesario, pero DaisyUI maneja la mayor parte */
     .input-nota {
-      @apply w-full max-w-[8ch] min-w-[6ch] text-center px-2 py-1.5 text-sm rounded-md border border-base-300;
-    }
-    .campo-individual {
-      @apply flex flex-col items-center mb-3;
-    }
-    .campo-etiqueta {
-      @apply text-xs font-medium text-gray-400 mb-1;
-    }
-    .grupo-campos {
-      @apply flex flex-wrap justify-center gap-4 mb-4;
-    }
-    .resultado {
-      @apply font-bold text-lg p-4 rounded-lg text-center mt-4 shadow-sm;
-    }
-    .resultado.aprobado { @apply bg-success/20 text-success border border-success/30; }
-    .resultado.suspendido { @apply bg-error/20 text-error border border-error/30; }
-    .materia-card {
-      @apply bg-base-200 rounded-xl border border-base-300 shadow-md mb-5;
-    }
-    .titulo-materia {
-      @apply text-lg font-semibold text-principal px-4 py-3;
-    }
-    .contenedor-campos {
-      @apply p-4;
+      @apply w-full max-w-xs; /* Ajusta el ancho si es necesario */
     }
   </style>
 </head>
 <body class="bg-base-100 text-base-content min-h-screen p-4 md:p-6">
 
 <div class="fixed top-4 right-4 z-50">
-  <label class="swap swap-rotate">
+  <!-- Toggle de tema con DaisyUI -->
+  <label class="cursor-pointer grid place-items-center">
     <input type="checkbox" id="theme-toggle" class="theme-controller" value="light" />
-    <svg class="swap-off fill-current w-8 h-8 text-yellow-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-    </svg>
-    <svg class="swap-on fill-current w-8 h-8 text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-    </svg>
+    <span class="label-text">🌙</span> <span class="label-text ml-2">☀️</span>
   </label>
 </div>
 
 <div class="max-w-4xl mx-auto">
-  <h1 class="text-2xl md:text-3xl font-bold text-principal text-center mb-8 mt-2">🎓 Calculadora de Notas • Ingeniería</h1>
+  <h1 class="text-2xl md:text-3xl font-bold text-center mb-8 mt-2 text-primary">🎓 Calculadora de Notas • Ingeniería</h1>
   <div id="materias-container" class="space-y-6 mb-8"></div>
   <div class="text-center mb-6">
     <button id="limpiar-btn" class="btn btn-error btn-md md:btn-lg">🗑️ Limpiar todas las notas</button>
   </div>
-  <div id="promedio" class="resultado bg-principal/20 text-principal border border-principal/30" aria-live="polite"></div>
+  <!-- Resultado del promedio general -->
+  <div id="promedio" class="alert alert-info shadow-lg" aria-live="polite">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <span>📊 Promedio general: -</span>
+  </div>
 </div>
 
 <script>
@@ -96,17 +75,17 @@ const materiasData = [
         tipo: 'grupo',
         label: 'Proyecto de Laboratorio (6 tests iguales)',
         items: [
-          { id: 'term_t1', label: 'Test 1 (1.67%)', globalPerc: '1.67%' },
-          { id: 'term_t2', label: 'Test 2 (1.67%)', globalPerc: '1.67%' },
-          { id: 'term_t3', label: 'Test 3 (1.67%)', globalPerc: '1.67%' },
-          { id: 'term_t4', label: 'Test 4 (1.67%)', globalPerc: '1.67%' },
-          { id: 'term_t5', label: 'Test 5 (1.67%)', globalPerc: '1.67%' },
-          { id: 'term_t6', label: 'Test 6 (1.67%)', globalPerc: '1.67%' }
+          { id: 'term_t1', label: 'Test 1', globalPerc: '1.67%' },
+          { id: 'term_t2', label: 'Test 2', globalPerc: '1.67%' },
+          { id: 'term_t3', label: 'Test 3', globalPerc: '1.67%' },
+          { id: 'term_t4', label: 'Test 4', globalPerc: '1.67%' },
+          { id: 'term_t5', label: 'Test 5', globalPerc: '1.67%' },
+          { id: 'term_t6', label: 'Test 6', globalPerc: '1.67%' }
         ]
       },
-      { id: 'term_aula', label: 'Puntos por participación en el aula (10%)', globalPerc: '10%' },
-      { id: 'term_lab', label: 'Prácticas de Laboratorio (10%)', globalPerc: '10%' },
-      { id: 'term_final', label: 'Examen Final (mín. 3.5/10) (70%)', globalPerc: '70%' }
+      { id: 'term_aula', label: 'Puntos por participación en el aula', globalPerc: '10%' },
+      { id: 'term_lab', label: 'Prácticas de Laboratorio', globalPerc: '10%' },
+      { id: 'term_final', label: 'Examen Final (mín. 3.5/10)', globalPerc: '70%' }
     ]
   },
   {
@@ -117,24 +96,24 @@ const materiasData = [
         tipo: 'grupo',
         label: 'Laboratorio (15% total)',
         items: [
-          { id: 'calc_lab1', label: 'Clase 1 (1.5%)', globalPerc: '1.5%' },
-          { id: 'calc_lab2', label: 'Clase 2 (1.5%)', globalPerc: '1.5%' },
-          { id: 'calc_lab3', label: 'Clase 3 (1.5%)', globalPerc: '1.5%' },
-          { id: 'calc_lab4', label: 'Clase 4 (1.5%)', globalPerc: '1.5%' },
-          { id: 'calc_lab5', label: 'Clase 5 (9%)', globalPerc: '9%' }
+          { id: 'calc_lab1', label: 'Clase 1', globalPerc: '1.5%' },
+          { id: 'calc_lab2', label: 'Clase 2', globalPerc: '1.5%' },
+          { id: 'calc_lab3', label: 'Clase 3', globalPerc: '1.5%' },
+          { id: 'calc_lab4', label: 'Clase 4', globalPerc: '1.5%' },
+          { id: 'calc_lab5', label: 'Clase 5', globalPerc: '9%' }
         ]
       },
       {
         tipo: 'grupo',
         label: 'Problemas en aula (10% total → 2.5% c/u)',
         items: [
-          { id: 'calc_a1', label: 'Ejercicio 1 (2.5%)', globalPerc: '2.5%' },
-          { id: 'calc_a2', label: 'Ejercicio 2 (2.5%)', globalPerc: '2.5%' },
-          { id: 'calc_a3', label: 'Ejercicio 3 (2.5%)', globalPerc: '2.5%' },
-          { id: 'calc_a4', label: 'Ejercicio 4 (2.5%)', globalPerc: '2.5%' }
+          { id: 'calc_a1', label: 'Ejercicio 1', globalPerc: '2.5%' },
+          { id: 'calc_a2', label: 'Ejercicio 2', globalPerc: '2.5%' },
+          { id: 'calc_a3', label: 'Ejercicio 3', globalPerc: '2.5%' },
+          { id: 'calc_a4', label: 'Ejercicio 4', globalPerc: '2.5%' }
         ]
       },
-      { id: 'calc_final', label: 'Examen final (mín. 4.0/10) (70%)', globalPerc: '70%' },
+      { id: 'calc_final', label: 'Examen final (mín. 4.0/10)', globalPerc: '70%' },
       { id: 'calc_parcial', label: 'Examen parcial (sustituye 50% del final si ≥5.0)', globalPerc: '—' }
     ]
   },
@@ -142,9 +121,9 @@ const materiasData = [
     id: 'electricidad',
     titulo: 'Tecnología Eléctrica',
     campos: [
-      { id: 'elec_lab', label: 'Laboratorio (15%)', globalPerc: '15%' },
-      { id: 'elec_parcial', label: 'Parcial (40%)', globalPerc: '40%' },
-      { id: 'elec_final', label: 'Examen Final (mín. 5.0/10) (45%)', globalPerc: '45%' }
+      { id: 'elec_lab', label: 'Laboratorio', globalPerc: '15%' },
+      { id: 'elec_parcial', label: 'Parcial', globalPerc: '40%' },
+      { id: 'elec_final', label: 'Examen Final (mín. 5.0/10)', globalPerc: '45%' }
     ]
   },
   {
@@ -155,12 +134,12 @@ const materiasData = [
         tipo: 'grupo',
         label: 'Parciales (15% total → 7.5% c/u)',
         items: [
-          { id: 'res_p1', label: 'Parcial 1 (7.5%)', globalPerc: '7.5%' },
-          { id: 'res_p2', label: 'Parcial 2 (7.5%)', globalPerc: '7.5%' }
+          { id: 'res_p1', label: 'Parcial 1', globalPerc: '7.5%' },
+          { id: 'res_p2', label: 'Parcial 2', globalPerc: '7.5%' }
         ]
       },
-      { id: 'res_lab', label: 'Laboratorio (asistencia) (5%)', globalPerc: '5%' },
-      { id: 'res_final', label: 'Examen Final (80%)', globalPerc: '80%' }
+      { id: 'res_lab', label: 'Laboratorio (asistencia)', globalPerc: '5%' },
+      { id: 'res_final', label: 'Examen Final', globalPerc: '80%' }
     ]
   },
   {
@@ -171,13 +150,13 @@ const materiasData = [
         tipo: 'grupo',
         label: 'Laboratorio (20% total)',
         items: [
-          { id: 'proc_lab1', label: 'Kahoots del laboratorio (4%)', globalPerc: '4%' },
-          { id: 'proc_lab2', label: 'Trabajo entregado (12%)', globalPerc: '12%' },
-          { id: 'proc_lab3', label: 'Defensa oral (4%)', globalPerc: '4%' }
+          { id: 'proc_lab1', label: 'Kahoots del laboratorio', globalPerc: '4%' },
+          { id: 'proc_lab2', label: 'Trabajo entregado', globalPerc: '12%' },
+          { id: 'proc_lab3', label: 'Defensa oral', globalPerc: '4%' }
         ]
       },
-      { id: 'proc_kahoot', label: 'Kahoot (10%)', globalPerc: '10%' },
-      { id: 'proc_final', label: 'Examen Final (mín. 2.5/10) (70%)', globalPerc: '70%' }
+      { id: 'proc_kahoot', label: 'Kahoot', globalPerc: '10%' },
+      { id: 'proc_final', label: 'Examen Final (mín. 2.5/10)', globalPerc: '70%' }
     ]
   }
 ];
@@ -189,42 +168,56 @@ function renderMaterias() {
 
   materiasData.forEach(m => {
     const card = document.createElement('div');
-    card.className = 'materia-card';
+    card.className = 'card bg-base-200 shadow-xl border border-base-300';
     card.innerHTML = `
-      <div class="titulo-materia">${m.titulo}</div>
-      <div class="contenedor-campos">
-        ${m.campos.map(campo => {
-          if (campo.tipo === 'grupo') {
-            return `
-              <h3 class="font-medium text-base-content mb-2">${campo.label}</h3>
-              <div class="grupo-campos">
-                ${campo.items.map(item => `
-                  <div class="campo-individual">
-                    <label class="campo-etiqueta">${item.label}</label>
-                    <input id="${item.id}" type="number" step="0.01" min="0" max="10"
-                      class="input-nota"
-                      placeholder="0.00" inputmode="decimal" />
+      <div class="card-body p-4">
+        <h2 class="card-title text-lg md:text-xl text-primary flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+          ${m.titulo}
+        </h2>
+        <div class="space-y-3">
+          ${m.campos.map(campo => {
+            if (campo.tipo === 'grupo') {
+              return `
+                <div class="p-3 bg-base-300 rounded-lg">
+                  <h3 class="font-medium text-sm text-base-content/80 mb-2">${campo.label}</h3>
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                    ${campo.items.map(item => `
+                      <div class="form-control">
+                        <label class="label">
+                          <span class="label-text text-xs">${item.label}</span>
+                          <span class="badge badge-sm badge-neutral">${item.globalPerc}</span>
+                        </label>
+                        <input id="${item.id}" type="number" step="0.01" min="0" max="10" class="input input-bordered input-sm input-nota" placeholder="0.00" inputmode="decimal" />
+                      </div>
+                    `).join('')}
                   </div>
-                `).join('')}
-              </div>
-            `;
-          } else {
-            return `
-              <div class="campo-individual">
-                <label for="${campo.id}" class="campo-etiqueta">${campo.label}</label>
-                <input id="${campo.id}" type="number" step="0.01" min="0" max="10"
-                  class="input-nota"
-                  placeholder="0.00" inputmode="decimal" />
-              </div>
-            `;
-          }
-        }).join('')}
-        <div id="${m.id}_res" class="resultado" aria-live="polite"></div>
+                </div>
+              `;
+            } else {
+              return `
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">${campo.label}</span>
+                    <span class="badge badge-sm badge-primary">${campo.globalPerc}</span>
+                  </label>
+                  <input id="${campo.id}" type="number" step="0.01" min="0" max="10" class="input input-bordered input-nota" placeholder="0.00" inputmode="decimal" />
+                </div>
+              `;
+            }
+          }).join('')}
+        </div>
+        <!-- Resultado de la materia -->
+        <div id="${m.id}_res" class="alert alert-info mt-4 hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Resultado: Cargando...</span>
+        </div>
       </div>
     `;
     container.appendChild(card);
   });
 }
+
 
 // === UTILIDADES ===
 const guardar = (id, v) => localStorage.setItem(id, v);
@@ -254,9 +247,11 @@ function calcTermica() {
   let nota = final < 3.5 ? final : 0.1 * aula + 0.1 * lab + 0.1 * tests + 0.7 * final;
 
   const elem = document.getElementById('termica_res');
+  elem.classList.remove('alert-info', 'alert-success', 'alert-error');
   const estado = final < 3.5 ? '❌ Suspendido (Examen Final < 3.5 → No se promedia)' : (nota >= 5 ? '✅ Aprobado' : '❌ Suspendido');
-  elem.textContent = `Térmica: ${nota.toFixed(2)} → ${estado}`;
-  elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
+  elem.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>Térmica: ${nota.toFixed(2)} → ${estado}</span>`;
+  elem.className = `alert ${nota >= 5 ? 'alert-success' : 'alert-error'} mt-4`;
+  elem.classList.remove('hidden');
   return nota;
 }
 
@@ -280,14 +275,16 @@ function calcCalculo() {
   }
 
   const elem = document.getElementById('calculo_res');
+  elem.classList.remove('alert-info', 'alert-success', 'alert-error');
   let estado;
   if (final < 4.0) {
     estado = '❌ Suspendido (Examen Final < 4.0 → No se promedia)';
   } else {
     estado = nota >= 5 ? '✅ Aprobado' : '❌ Suspendido';
   }
-  elem.textContent = `Cálculo: ${nota.toFixed(2)} → ${estado}`;
-  elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
+  elem.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>Cálculo: ${nota.toFixed(2)} → ${estado}</span>`;
+  elem.className = `alert ${nota >= 5 ? 'alert-success' : 'alert-error'} mt-4`;
+  elem.classList.remove('hidden');
   return nota;
 }
 
@@ -308,9 +305,11 @@ function calcElectricidad() {
   }
 
   const elem = document.getElementById('electricidad_res');
+  elem.classList.remove('alert-info', 'alert-success', 'alert-error');
   const estado = final < 5.0 ? '❌ Suspendido (Examen Final < 5.0 → No se promedia)' : (nota >= 5 ? '✅ Aprobado' : '❌ Suspendido');
-  elem.textContent = `Eléctrica: ${nota.toFixed(2)} → ${estado}`;
-  elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
+  elem.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>Eléctrica: ${nota.toFixed(2)} → ${estado}</span>`;
+  elem.className = `alert ${nota >= 5 ? 'alert-success' : 'alert-error'} mt-4`;
+  elem.classList.remove('hidden');
   return nota;
 }
 
@@ -323,9 +322,11 @@ function calcResistencia() {
   const nota = 0.05 * lab + 0.075 * p1 + 0.075 * p2 + 0.8 * final;
 
   const elem = document.getElementById('resistencia_res');
+  elem.classList.remove('alert-info', 'alert-success', 'alert-error');
   const estado = nota >= 5 ? '✅ Aprobado' : '❌ Suspendido';
-  elem.textContent = `Resistencia: ${nota.toFixed(2)} → ${estado}`;
-  elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
+  elem.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>Resistencia: ${nota.toFixed(2)} → ${estado}</span>`;
+  elem.className = `alert ${nota >= 5 ? 'alert-success' : 'alert-error'} mt-4`;
+  elem.classList.remove('hidden');
   return nota;
 }
 
@@ -345,9 +346,11 @@ function calcProcesos() {
   }
 
   const elem = document.getElementById('procesos_res');
+  elem.classList.remove('alert-info', 'alert-success', 'alert-error');
   const estado = final < 2.5 ? '❌ Suspendido (Examen Final < 2.5 → No se promedia)' : (nota >= 5 ? '✅ Aprobado' : '❌ Suspendido');
-  elem.textContent = `Procesos: ${nota.toFixed(2)} → ${estado}`;
-  elem.className = `resultado ${nota >= 5 ? 'aprobado' : 'suspendido'}`;
+  elem.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>Procesos: ${nota.toFixed(2)} → ${estado}</span>`;
+  elem.className = `alert ${nota >= 5 ? 'alert-success' : 'alert-error'} mt-4`;
+  elem.classList.remove('hidden');
   return nota;
 }
 
@@ -360,7 +363,10 @@ function calcAll() {
     calcProcesos()
   ];
   const total = prom(notas);
-  document.getElementById('promedio').textContent = `📊 Promedio general: ${total.toFixed(2)}`;
+  const promedioDiv = document.getElementById('promedio');
+  promedioDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>📊 Promedio general: ${total.toFixed(2)}</span>`;
+  // Mantener el estilo de promedio como info o cambiar según criterio
+  promedioDiv.className = 'alert alert-info shadow-lg';
 }
 
 // === LIMPIAR ===
@@ -370,6 +376,8 @@ document.getElementById('limpiar-btn').addEventListener('click', () => {
       i.value = '';
       localStorage.removeItem(i.id);
     });
+    // Ocultar resultados de materias
+    document.querySelectorAll('[id$="_res"]').forEach(div => div.classList.add('hidden'));
     calcAll();
   }
 });
